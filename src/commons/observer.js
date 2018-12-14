@@ -1,4 +1,4 @@
-import { Dep } from './dep'
+import Dep from './dep'
 
 export default function observer(data) {
   if (data === null || typeof data !== 'object') {
