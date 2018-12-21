@@ -9,7 +9,7 @@ export default class Watcher {
   }
 
   update() {
-    const value = this.vm.$data[prop];
+    const value = this.vm.$data[this.prop];
     const oldValue = this.value;
     if (value !== oldValue) {
       this.value = value; // 更新watcher实例中value的值
@@ -19,7 +19,7 @@ export default class Watcher {
 
   get() {
     Dep.target = this; // 保存当前watcher实例
-    const value = this.vm.$data[prop]; // 触发属性的getter，给属性添加订阅者
+    const value = this.vm.$data[this.prop]; // 触发属性的getter，给属性添加订阅者
     Dep.target = null;
     return value;
   }

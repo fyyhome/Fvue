@@ -1,5 +1,5 @@
 export default class Dep {
-  static target = null;
+  // static target = null;
 
   constructor() {
     this.sub = [];
@@ -15,3 +15,5 @@ export default class Dep {
     });
   }
 }
+
+Dep.prototype.target = null
