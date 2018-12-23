@@ -52,6 +52,10 @@ export default class Compile{
         // 编译model指令
         if (attr.name === 'fv-model') {
           this.compileModel(ele, value);
+        } else if (attr.name === 'fv-show') {
+          this.compileShow(ele, value);
+        } else if (attr.name.split(':')[0] === 'fv-on') {
+          this.compileOn(ele, attr.name.split(':')[1], value);
         }
       }
     });
@@ -84,6 +88,15 @@ export default class Compile{
     });
   }
 
+  compileShow(node, prop) {
+    let val = this.vm.$data[prop];
+    this.updateShow(node, val);
+
+    new Watcher(this.vm, prop, (value) => {
+      this.updateShow(node, value);
+    })
+  }
+
   updateModel(node, val) {
     // htmlDataElement
     node.value = typeof val === 'undefined'? '' : val;
@@ -92,6 +105,10 @@ export default class Compile{
   updateView(node, val) {
     // 文本节点
     node.textContent = typeof val === 'undefined'? '' : val;
+  }
+
+  updateShow(node, val) {
+    node.style.display = Boolean(val)? 'block' : 'none';
   }
 
   isDrective(attr) {
@@ -104,5 +121,12 @@ export default class Compile{
 
   isTextNode(node) {
     return node.nodeType === 3; // 判断是否是文本节点
+  }
+
+  /**
+   * 编译时间绑定
+   */
+  compileOn(node, event, prop) {
+    node.addEventListener(event, this.vm.$method[prop]);
   }
 }

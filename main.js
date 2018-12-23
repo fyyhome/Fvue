@@ -7,8 +7,12 @@ class Fvue{
   constructor(options) {
     this.$options = options;
     this.$data = options.data;
+    this.$method = options.method;
     this.$el = document.querySelector(options.el);
     Object.keys(this.$data).forEach((key) => {
+      this.proxyData(key);
+    });
+    Object.keys(this.$method).forEach((key) => {
       this.proxyData(key);
     })
     this.init();
