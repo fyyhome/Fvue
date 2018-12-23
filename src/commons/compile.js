@@ -29,12 +29,13 @@ export default class Compile{
     [...childNodes].forEach((node) => {
       if (this.isElementNode(node)) {
         this.compile(node);
-      }
-      let reg = /\{\{(.*)\}\}/;
-      let text = node.textContent;
-      if (reg.test(text)) {
-        let prop = reg.exec(text)[1]; // 括号中的分组匹配
-        this.compileText(node, prop); // 替换模板
+      } else {
+        let reg = /\{\{(.*)\}\}/;
+        let text = node.textContent;
+        if (reg.test(text)) {
+          let prop = reg.exec(text)[1]; // 括号中的分组匹配
+          this.compileText(node, prop); // 替换模板
+        }
       }
       // 递归编译子节点
       if (node.childNodes && node.childNodes.length) {
@@ -127,6 +128,6 @@ export default class Compile{
    * 编译时间绑定
    */
   compileOn(node, event, prop) {
-    node.addEventListener(event, this.vm.$method[prop]);
+    node.addEventListener(event, this.vm.$method[prop].bind(this.vm));
   }
 }

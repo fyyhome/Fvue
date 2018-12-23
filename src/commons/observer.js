@@ -17,12 +17,12 @@ function defineReactive(data, key, value) {
       if(Dep.target) {
         dep.addSub(Dep.target);
       }
-      // 在无继承关系时，this指向定义当期属性的对象,谨慎使用
-      return this.value;
+      // 在无继承关系时，this指向定义当期属性的对象,谨慎使用: 疑问： 给value加this后的问题
+      return value //this.value;
     },
     set: function(newVal) {
-      if(this.value !== newVal) {
-        this.value = newVal;
+      if(value !== newVal) {
+        value = newVal;
         dep.notify(); // notify all the watcher of this prop
       }
     }
