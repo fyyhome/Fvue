@@ -105,7 +105,7 @@ export default class Compile{
 
   updateView(node, val) {
     // 文本节点
-    node.textContent = typeof val === 'undefined'? '' : val;
+    node.textContent = typeof val === 'undefined'? 'undefined' : val;
   }
 
   updateShow(node, val) {
@@ -125,9 +125,29 @@ export default class Compile{
   }
 
   /**
-   * 编译时间绑定
+   * 编译事件绑定
    */
   compileOn(node, event, prop) {
-    node.addEventListener(event, this.vm.$method[prop].bind(this.vm));
+    // node.addEventListener(event, this.vm.$method[prop].bind(this.vm));
+    node.addEventListener(event, this.vm.$method[prop].bind(new Proxy(this.vm, {
+      get(target, prop) {
+        if (target.$data.hasOwnProperty(prop)) {
+          return Reflect.get(target.$data, prop);
+        } else if (target.$method.hasOwnProperty(prop)) {
+          return Reflect.get(target.$method, prop);
+        } else {
+          throw new Error(`${prop}属性未定义`)
+        }
+      },
+      set(target, prop, value) {
+        if (target.$data.hasOwnProperty(prop)) {
+          return Reflect.set(target.$data, prop, value);
+        } else if (target.$method.hasOwnProperty(prop)) {
+          return Reflect.set(target.$method, prop, value);
+        } else {
+          throw new Error(`${prop}属性未定义`)
+        }
+      }
+    })));
   }
 }

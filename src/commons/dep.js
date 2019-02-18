@@ -1,5 +1,4 @@
 export default class Dep {
-  // static target = null;
 
   constructor() {
     this.sub = [];
